@@ -9,6 +9,7 @@ public class WorldController : MonoBehaviour
 
     public MazeController maze;
     public TimeController time;
+    public UIController ui;
 
     [NonSerialized]
     public bool mazeRunning1 = false;
@@ -20,6 +21,7 @@ public class WorldController : MonoBehaviour
     {
         maze = GameObject.FindObjectOfType<MazeController>();
         time = GameObject.FindObjectOfType<TimeController>();
+        ui = GameObject.FindObjectOfType<UIController>();
 
         //CenterCamera();
     }
@@ -28,17 +30,16 @@ public class WorldController : MonoBehaviour
     void Update()
     {
         //Starting and stopping timer if a maze is being solved
-        print("@WorldController - Running 1: " + mazeRunning1 + " Running 2:" + mazeRunning2);
         if (mazeRunning1 || mazeRunning2)
         {
             time.StartTimer();
-            GameObject.Find("UIController").GetComponent<UIController>().DisableFunctions();
+            ui.DisableFunctions();
         }
 
         if (!mazeRunning1 && !mazeRunning2)
         {
             time.PauseTimer();
-            GameObject.Find("UIController").GetComponent<UIController>().ReanableFunctions();
+            ui.ReanableFunctions();
         }
 
 

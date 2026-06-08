@@ -17,6 +17,8 @@ public class UIController : MonoBehaviour
 
     public bool mapTypeBool, sideOut;
 
+    RectTransform sidebar;
+
     void Start()
     {
         btnRandomize.onClick.AddListener(() =>
@@ -49,21 +51,16 @@ public class UIController : MonoBehaviour
             GameObject.Find("Maze 1").GetComponent<MazeSolver>().ResetSolving();
             GameObject.Find("Maze 2").GetComponent<MazeSolver>().ResetSolving();
         });
+
+        sidebar = GameObject.Find("Size Change Sidebar").GetComponent<RectTransform>();
     }
 
     void Update()
     {
-        if (sideOut && GameObject.Find("Size Change Sidebar").GetComponent<RectTransform>().anchoredPosition.x <  1685)
-        {
-            GameObject.Find("Size Change Sidebar").transform.Translate(new Vector3(0.005f, 0f, 0f) * Camera.main.orthographicSize);
-            print("@Update - Pushing out");
-
-        }
-        else if (!sideOut && GameObject.Find("Size Change Sidebar").GetComponent<RectTransform>().anchoredPosition.x > 1552)
-        {
-            print("@Update - Pulling back");
-            GameObject.Find("Size Change Sidebar").transform.Translate(new Vector3(-0.005f, 0f, 0f) * Camera.main.orthographicSize);
-        }
+        if (sideOut && sidebar.anchoredPosition.x <  1685)
+            sidebar.Translate(new Vector3(0.005f, 0f, 0f) * Camera.main.orthographicSize);
+        else if (!sideOut && sidebar.anchoredPosition.x > 1552)
+            sidebar.Translate(new Vector3(-0.005f, 0f, 0f) * Camera.main.orthographicSize);
     }
     public void CompareModeChange()
     {
