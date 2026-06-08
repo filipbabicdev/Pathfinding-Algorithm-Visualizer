@@ -8,11 +8,9 @@ public class MazeSolver : MonoBehaviour
 {
     Dropdown algoA, algoB;
     MazeController mazeController;
-    UIController uiController;
     WorldController worldController;
+    TimeController timeController;
     Maze mazeA, mazeB;
-
-    private bool setup;
 
     public float defaultCooldownTime = 0.2f;
     public float cooldownTime;
@@ -33,43 +31,32 @@ public class MazeSolver : MonoBehaviour
     void Start()
     {
         cooldownTime = defaultCooldownTime;
-
-        mazeController = GameObject.Find("MazeController").GetComponent<MazeController>();
-        uiController = GameObject.Find("UIController").GetComponent<UIController>();
-        worldController = GameObject.Find("GameWorld").GetComponent<WorldController>();
-
-        setup = true;
     }
 
     void Update()
     {
-        if (setup)
-        {
-            algoA = GameObject.Find("selAlgorithmA").GetComponent<Dropdown>();
-            mazeA = mazeController.mazeData[0];
-            if (mazeController.Compare)
-            {
-                algoB = GameObject.Find("selAlgorithmB").GetComponent<Dropdown>();
-                mazeB = mazeController.mazeData[1];
-            }
-
-            setup = false;
-        }
-
         if (Time.time > nextFireTime && running)
         {
             if (MazeIndex == 0)
             {
                 worldController.mazeRunning1 = true;
-                RunStep(algoA.value, mazeA);
+                RunStep(algoA.value, mazeController.mazeData[0]);
             }
             else if (MazeIndex == 1)
             {
                 worldController.mazeRunning2 = true;
-                RunStep(algoB.value, mazeB);
+                RunStep(algoB.value, mazeController.mazeData[1]);
             }
         }
+    }
 
+    public void Init(MazeController mazeController, WorldController worldController, TimeController timeController, Dropdown algoA, Dropdown algoB)
+    {
+        this.mazeController = mazeController;
+        this.worldController = worldController;
+        this.timeController = timeController;
+        this.algoA = algoA;
+        this.algoB = algoB;
     }
 
     void BFS(Maze maze)
@@ -422,7 +409,7 @@ public class MazeSolver : MonoBehaviour
 
             if ((check.Type == Tile.TileType.Floor || check.Type == Tile.TileType.End))
                 result.Add(check);
-            
+
         }
 
         return result;
@@ -432,12 +419,7 @@ public class MazeSolver : MonoBehaviour
     {
         running = true;
         if (stage == 0)
-        {
-            if (MazeIndex == 0)
-                mazeController.ResetVisited(mazeA);
-            else
-                mazeController.ResetVisited(mazeB);
-        }
+            mazeController.ResetVisited(mazeController.mazeData[MazeIndex]);
     }
 
     public void PauseSolving()
@@ -448,11 +430,7 @@ public class MazeSolver : MonoBehaviour
     public void ResetSolving()
     {
         stage = 0;
-
-        if (MazeIndex == 0)
-            mazeController.ResetVisited(mazeA);
-        else
-            mazeController.ResetVisited(mazeB);
+        mazeController.ResetVisited(mazeController.mazeData[MazeIndex]);
     }
 
     void SaveTime()
@@ -466,8 +444,8 @@ public class MazeSolver : MonoBehaviour
         myCanvas.name = "Final time";
         myCanvas.AddComponent<Canvas>();
 
-        myCanvas.transform.position = new Vector3(this.transform.position.x + Mathf.FloorToInt(mazeA.Width / 2), -2, 1);
-        myCanvas.GetComponent<RectTransform>().sizeDelta = new Vector2(mazeA.Width * 100, 300);
+        myCanvas.transform.position = new Vector3(this.transform.position.x + Mathf.FloorToInt(mazeController.mazeData[MazeIndex].Width / 2), -2, 1);
+        myCanvas.GetComponent<RectTransform>().sizeDelta = new Vector2(mazeController.mazeData[MazeIndex].Width * 100, 300);
         myCanvas.GetComponent<RectTransform>().localScale = new Vector3(0.01f, 0.01f, 1f);
 
         canvas = myCanvas.GetComponent<Canvas>();
@@ -489,7 +467,7 @@ public class MazeSolver : MonoBehaviour
         myText.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
 
         text.font = mazeController.font;
-        text.text = GameObject.Find("TimeController").GetComponent<TimeController>().timeDisplay.text;
+        text.text = timeController.timeDisplay.text;
         text.alignment = TextAnchor.MiddleCenter;
         text.fontStyle = FontStyle.Bold;
         text.resizeTextForBestFit = true;
@@ -497,8 +475,10 @@ public class MazeSolver : MonoBehaviour
         text.color = mazeController.colorWall;
     }
 
-    void RunStep(int step, Maze maze) {
-        switch (step) {
+    void RunStep(int step, Maze maze)
+    {
+        switch (step)
+        {
             case 0: BFS(maze); break;
             case 1: DFS(maze); break;
             case 2: Dijkstra(maze); break;

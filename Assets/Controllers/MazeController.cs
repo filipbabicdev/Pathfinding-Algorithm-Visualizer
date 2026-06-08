@@ -7,6 +7,9 @@ using UnityEngine.UI;
 
 public class MazeController : MonoBehaviour
 {
+    [SerializeField] WorldController worldController;
+    [SerializeField] TimeController timeController;
+    [SerializeField] Dropdown dropA, dropB;
     int mazeWidth = 31;
     int mazeHeight = 31;
 
@@ -209,7 +212,9 @@ public class MazeController : MonoBehaviour
         tilesContainer.transform.SetParent(this.transform, true);
         tilesContainer.transform.position = tilesContainer.transform.parent.position;
         tilesContainer.name = "Maze 1";
-        tilesContainer.AddComponent<MazeSolver>().MazeIndex = 0;
+        MazeSolver solver1 = tilesContainer.AddComponent<MazeSolver>();
+        solver1.MazeIndex = 0;
+        solver1.Init(this, worldController, timeController, dropA, dropB);
         maze1 = tilesContainer;
 
         if (compare)
@@ -219,7 +224,9 @@ public class MazeController : MonoBehaviour
             tilesContainer.transform.position = tilesContainer.transform.parent.position;
             tilesContainer.transform.position = new Vector3(tilesContainer.transform.position.x + mazeWidth + 5, tilesContainer.transform.position.y);
             tilesContainer.name = "Maze 2";
-            tilesContainer.AddComponent<MazeSolver>().MazeIndex = 1;
+            MazeSolver solver2 = tilesContainer.AddComponent<MazeSolver>();
+            solver2.MazeIndex = 1;
+            solver2.Init(this, worldController, timeController, dropA, dropB);
             maze2 = tilesContainer;
         }
     }
