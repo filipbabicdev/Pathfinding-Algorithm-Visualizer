@@ -116,7 +116,7 @@ public class MazeSolver : MonoBehaviour
                 return;
 
             case 2:
-                List<Tile> neighbours = UnvisitedNeighbours(currentTile, maze);
+                List<Tile> neighbours = GetNeighbours(currentTile, maze, true);
                 for (int i = 0; i < neighbours.Count; i++)
                 {
                     neighbours[i].Visited = true;
@@ -180,7 +180,7 @@ public class MazeSolver : MonoBehaviour
                 return;
 
             case 2:
-                List<Tile> neighbours = UnvisitedNeighbours(currentTile, maze);
+                List<Tile> neighbours = GetNeighbours(currentTile, maze, true);
                 for (int i = 0; i < neighbours.Count; i++)
                 {
                     neighbours[i].Visited = true;
@@ -244,7 +244,7 @@ public class MazeSolver : MonoBehaviour
                 return;
 
             case 2:
-                List<Tile> neighbours = UnvisitedNeighbours(currentTile, maze);
+                List<Tile> neighbours = GetNeighbours(currentTile, maze, true);
 
 
                 for (int i = 0; i < neighbours.Count; i++)
@@ -346,7 +346,7 @@ public class MazeSolver : MonoBehaviour
                 return;
 
             case 2:
-                List<Tile> neighbours = FindNeighbours(currentTile, maze);
+                List<Tile> neighbours = GetNeighbours(currentTile, maze, false);
 
                 for (int i = 0; i < neighbours.Count; i++)
                 {
@@ -408,39 +408,21 @@ public class MazeSolver : MonoBehaviour
             worldController.mazeRunning2 = false;
     }
 
-    List<Tile> UnvisitedNeighbours(Tile currentTile, Maze maze)
+    List<Tile> GetNeighbours(Tile currentTile, Maze maze, bool skipVisited)
     {
         List<Tile> result = new List<Tile>();
         int[,] order = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
-        Tile check;
-
 
         for (int i = 0; i < order.Length / 2; i++)
         {
-            check = maze.GetTileAt(currentTile.X + order[i, 0], currentTile.Y + order[i, 1]);
-            if (check.Visited == false && (check.Type == Tile.TileType.Floor || check.Type == Tile.TileType.End))
-            {
-                result.Add(check);
-            }
-        }
+            Tile check = maze.GetTileAt(currentTile.X + order[i, 0], currentTile.Y + order[i, 1]);
 
-        return result;
-    }
+            if (skipVisited && check.Visited)
+                continue;
 
-    List<Tile> FindNeighbours(Tile currentTile, Maze maze)
-    {
-        List<Tile> result = new List<Tile>();
-        int[,] order = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
-        Tile check;
-
-
-        for (int i = 0; i < order.Length / 2; i++)
-        {
-            check = maze.GetTileAt(currentTile.X + order[i, 0], currentTile.Y + order[i, 1]);
             if ((check.Type == Tile.TileType.Floor || check.Type == Tile.TileType.End))
-            {
                 result.Add(check);
-            }
+            
         }
 
         return result;
