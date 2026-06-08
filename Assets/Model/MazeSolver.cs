@@ -13,7 +13,6 @@ public class MazeSolver : MonoBehaviour
     Maze mazeA, mazeB;
 
     public float defaultCooldownTime = 0.2f;
-    public float cooldownTime;
     private float nextFireTime = 0;
 
     private bool running = false;
@@ -30,7 +29,6 @@ public class MazeSolver : MonoBehaviour
 
     void Start()
     {
-        cooldownTime = defaultCooldownTime;
     }
 
     void Update()
@@ -485,6 +483,6 @@ public class MazeSolver : MonoBehaviour
             case 3: AStar(maze); break;
             default: return;
         }
-        nextFireTime = Time.time + cooldownTime;
+        nextFireTime = Time.time + defaultCooldownTime / timeController.SpeedIndex;
     }
 }

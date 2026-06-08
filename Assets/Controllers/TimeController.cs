@@ -10,6 +10,7 @@ public class TimeController : MonoBehaviour
     public bool running = false;
     public Text timeDisplay;
     public Button spd1, spd2, spd3;
+    public int SpeedIndex => speedIndex;
     int speedIndex;
 
     void Start()
@@ -77,17 +78,8 @@ public class TimeController : MonoBehaviour
         timeDisplay.text = string.Format("{0:00}:{1:00}.{2:00}", minute, second, milisecond);
     }
 
-    void SpeedChange(float speedIndex)
+    void SpeedChange(float speedValue)
     {
-        this.speedIndex = Mathf.FloorToInt(speedIndex);
-
-        MazeSolver ms = GameObject.Find("Maze 1").GetComponent<MazeSolver>();
-
-        ms.cooldownTime = ms.defaultCooldownTime / speedIndex;
-
-        ms = GameObject.Find("Maze 2").GetComponent<MazeSolver>();
-
-        ms.cooldownTime = ms.defaultCooldownTime / speedIndex;
-        Debug.Log("DEBUG: TimeController - Speed changed to " + speedIndex);
+        speedIndex = Mathf.FloorToInt(speedValue);
     }
 }
