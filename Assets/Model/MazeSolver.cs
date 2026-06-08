@@ -64,22 +64,18 @@ public class MazeSolver : MonoBehaviour
                 switch (algoA.value)
                 {
                     case 0:
-                        print("Running BFS... ");
                         BFS(mazeController.mazeData[0]);
                         nextFireTime = Time.time + cooldownTime;
                         return;
                     case 1:
-                        print("Running DFS...");
                         DFS(mazeA);
                         nextFireTime = Time.time + cooldownTime;
                         return;
                     case 2:
-                        print("Running Dijkstra...");
                         Dijkstra(mazeA);
                         nextFireTime = Time.time + cooldownTime;
                         return;
                     case 3:
-                        print("Running A*...");
                         AStar(mazeA);
                         nextFireTime = Time.time + cooldownTime;
                         return;
@@ -94,22 +90,18 @@ public class MazeSolver : MonoBehaviour
                 switch (algoB.value)
                 {
                     case 0:
-                        print("Running BFS... ");
                         BFS(mazeController.mazeData[1]);
                         nextFireTime = Time.time + cooldownTime;
                         return;
                     case 1:
-                        print("Running DFS...");
                         DFS(mazeB);
                         nextFireTime = Time.time + cooldownTime;
                         return;
                     case 2:
-                        print("Running Dijkstra...");
                         Dijkstra(mazeB);
                         nextFireTime = Time.time + cooldownTime;
                         return;
                     case 3:
-                        print("Running A*...");
                         AStar(mazeB);
                         nextFireTime = Time.time + cooldownTime;
                         return;
@@ -294,23 +286,17 @@ public class MazeSolver : MonoBehaviour
 
             case 2:
                 List<Tile> neighbours = UnvisitedNeighbours(currentTile, maze);
-                print("@MazeSolver/DijkstraCase2: Neighbour block");
 
 
                 for (int i = 0; i < neighbours.Count; i++)
                 {
                     int neigDistance = neighbours[i].Distance + neighbours[i].Cost;
                     int currDistance = currentTile.Distance + neighbours[i].Cost + 1;
-                    print("@MazeSolver/DijkstraCase2: neigDistance = " + neigDistance + ", currDistance = " + currDistance);
 
                     int minDistance = Mathf.Min(neigDistance, currDistance);
 
-                    print("@MazeSolver/DijkstraCase2: MinDistance = " + minDistance + " , neigDistance = " + neigDistance);
-
                     if (minDistance != neigDistance)
                     {
-                        print("@MazeSolver/DijkstraCase2: Entered new parent with Distance = " + currDistance);
-
                         neighbours[i].Visited = true;
                         neighbours[i].Distance = minDistance;
                         neighbours[i].Parent = currentTile;
@@ -318,14 +304,12 @@ public class MazeSolver : MonoBehaviour
                         if (priorityQueue.Contains(neighbours[i]))
                         {
                             priorityQueue.SetPriority(neighbours[i], minDistance);
-                            print("Dijkstra - prioQueue containst, setPrio");
                         }
                     }
 
                     if (!priorityQueue.Contains(neighbours[i]))
                     {
                         priorityQueue.Enqueue(neighbours[i], minDistance);
-                        print("Dijkstra - prioQueue not containst, Enqueue");
                     }
                 }
 
@@ -405,20 +389,16 @@ public class MazeSolver : MonoBehaviour
             case 2:
                 List<Tile> neighbours = FindNeighbours(currentTile, maze);
 
-                print("@MazeSolver/A* - Neighbour Block:");
                 for (int i = 0; i < neighbours.Count; i++)
                 {
-                    print("@MazeSolver/A* - Update RootDistance - neigRoot = " + neighbours[i].RootDistance + ", currRoot = " + currentTile.RootDistance);
                     neighbours[i].RootDistance = Mathf.Min(neighbours[i].RootDistance, currentTile.RootDistance + neighbours[i].Cost + 1);
                     int minDistance = Mathf.Min(neighbours[i].Distance, neighbours[i].RootDistance + neighbours[i].ManDistance);
 
-                    print("@MazeSolver/A* - minDistance = " + minDistance + ", comp = " + neighbours[i].Distance);
                     if (minDistance != neighbours[i].Distance)
                     {
                         neighbours[i].Visited = true;
                         neighbours[i].Distance = minDistance;
                         neighbours[i].Parent = currentTile;
-                        print("@MazeSolver/A* - New Parent written with distance: " + minDistance);
 
                         if (priorityQueue.Contains(neighbours[i]))
                         {
@@ -463,8 +443,6 @@ public class MazeSolver : MonoBehaviour
         running = false;
         SaveTime();
 
-        print("@MazeSolver/FinalPath - Total cost + distance = " + totalDistance);
-
         if (this.name == "Maze 1")
             worldController.mazeRunning1 = false;
         else
@@ -481,14 +459,11 @@ public class MazeSolver : MonoBehaviour
         for (int i = 0; i < order.Length / 2; i++)
         {
             check = maze.GetTileAt(currentTile.X + order[i, 0], currentTile.Y + order[i, 1]);
-            print("Neig " + i + ", isVisited: " + check.Visited);
             if (check.Visited == false && (check.Type == Tile.TileType.Floor || check.Type == Tile.TileType.End))
             {
                 result.Add(check);
             }
         }
-
-        print("Unvisited neig count: " + result.Count);
 
         return result;
     }
@@ -503,14 +478,11 @@ public class MazeSolver : MonoBehaviour
         for (int i = 0; i < order.Length / 2; i++)
         {
             check = maze.GetTileAt(currentTile.X + order[i, 0], currentTile.Y + order[i, 1]);
-            print("Neig " + i + ", isVisited: " + check.Visited);
             if ((check.Type == Tile.TileType.Floor || check.Type == Tile.TileType.End))
             {
                 result.Add(check);
             }
         }
-
-        print("Unvisited neig count: " + result.Count);
 
         return result;
     }

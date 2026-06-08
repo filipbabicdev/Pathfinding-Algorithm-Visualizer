@@ -16,13 +16,10 @@ public class Maze
     {
         this.Width = width;
         this.Height = height;
-        
-        //Debug.Log("@Maze/Construct - Maze is created. Size: " + Width + ", " + Height);
-    }
+            }
 
     public Tile GetTileAt(int x, int y)
     {
-        //Debug.Log("@Maze/GetTileAt() -  x = " + x + " y = " + y);
         if (x > Width || x < 0 || y > Height || y < 0)
         {
             Debug.Log("Tile is out of range.");
@@ -37,8 +34,6 @@ public class Maze
 
     public Tile GenerateMazeStartEnd()
     {
-        Debug.Log("@Maze/GenerateMazeStartEnd");
-
         Tile tile_data;
         int index;
 
@@ -76,13 +71,10 @@ public class Maze
                 tiles[x, y] = new Tile(x, y);
             }
         }
-
-        //Debug.Log("@Maze/GenerateTileData() - Tiles lenght = " + tiles.Length);
     }
 
     public void GenerateNoWalls()
     {
-        Debug.Log("@Maze/GenerateNoWalls");
         GenerateMazeStartEnd();
 
         foreach (Tile t in tiles)
@@ -102,8 +94,6 @@ public class Maze
 
     public void GenerateMaze(Tile startTile = null)
     {
-        Debug.Log("@Maze/GenerateMaze");
-
         //Desegnate maze Start and End nodes if there are none 
         if (startTile == null)
             startTile = GetTileAt(1, GenerateMazeStartEnd().Y);
@@ -123,7 +113,6 @@ public class Maze
 
             currentTile.Type = Tile.TileType.Floor;
 
-            //Debug.Log("@Maze/Generatemaze() - " + (currentTile.X) + " " + currentTile.Y);
             if (GetTileAt(currentTile.X, currentTile.Y).Type == Tile.TileType.End)
                 continue;
 
@@ -142,8 +131,6 @@ public class Maze
                 pathStack.Push(tileNeighbours[index]);
             }
         }
-
-        //Debug.Log("Done generating Maze");
     }
 
     public List<Tile> FindNeighbours(Tile currentTile, int jump = 2)
@@ -160,8 +147,6 @@ public class Maze
 
             if (x + i < 0 || x + i > Width - 1)
                 continue;
-
-            //Debug.Log("@Maze/FindNeighbours - " + (x + i) + ", " + y);
 
             currentNeighbour = GetTileAt(x + i, y);
             if (currentNeighbour.Visited)
@@ -191,12 +176,9 @@ public class Maze
         Maze copy = new Maze(Width, Height);
         copy.tiles = new Tile[Width, Height];
 
-        Debug.Log("@Maze/DeepClone() - Entered DeepClone function...");
         foreach (Tile t in this.tiles)
         {
-            Debug.Log("@Maze/DeepClone() - current tile " + t.X + ", " + t.Y + ", " + t.Start);
             copy.tiles[t.X, t.Y] = t.DeepClone();
-            Debug.Log("@Maze/DeepClone() - Startcheck - " + copy.tiles[t.X, t.Y].Type + ", " + copy.tiles[t.X, t.Y].X + ", " + copy.tiles[t.X, t.Y].Y);
         }
 
         return copy;
