@@ -28,6 +28,7 @@ public class MazeSolver : MonoBehaviour
     PriorityQueue<Tile> priorityQueue;
     Tile currentTile;
 
+    public int MazeIndex { get; set; }   // 0 = Maze 1, 1 = Maze 2
 
     void Start()
     {
@@ -57,7 +58,7 @@ public class MazeSolver : MonoBehaviour
 
         if (Time.time > nextFireTime && running)
         {
-            if (this.name == "Maze 1")
+            if (MazeIndex == 0)
             {
                 worldController.mazeRunning1 = true;
 
@@ -83,7 +84,7 @@ public class MazeSolver : MonoBehaviour
                         return;
                 }
             }
-            else if (this.name == "Maze 2")
+            else if (MazeIndex == 1)
             {
                 worldController.mazeRunning2 = true;
 
@@ -443,7 +444,7 @@ public class MazeSolver : MonoBehaviour
         running = false;
         SaveTime();
 
-        if (this.name == "Maze 1")
+        if (MazeIndex == 0)
             worldController.mazeRunning1 = false;
         else
             worldController.mazeRunning2 = false;
@@ -492,7 +493,7 @@ public class MazeSolver : MonoBehaviour
         running = true;
         if (stage == 0)
         {
-            if (this.name == "Maze 1")
+            if (MazeIndex == 0)
                 mazeController.ResetVisited(mazeA);
             else
                 mazeController.ResetVisited(mazeB);
@@ -508,7 +509,7 @@ public class MazeSolver : MonoBehaviour
     {
         stage = 0;
 
-        if (this.name == "Maze 1")
+        if (MazeIndex == 0)
             mazeController.ResetVisited(mazeA);
         else
             mazeController.ResetVisited(mazeB);

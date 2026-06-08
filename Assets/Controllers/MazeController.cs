@@ -209,7 +209,7 @@ public class MazeController : MonoBehaviour
         tilesContainer.transform.SetParent(this.transform, true);
         tilesContainer.transform.position = tilesContainer.transform.parent.position;
         tilesContainer.name = "Maze 1";
-        tilesContainer.AddComponent<MazeSolver>();
+        tilesContainer.AddComponent<MazeSolver>().MazeIndex = 0;
         maze1 = tilesContainer;
 
         if (compare)
@@ -219,7 +219,7 @@ public class MazeController : MonoBehaviour
             tilesContainer.transform.position = tilesContainer.transform.parent.position;
             tilesContainer.transform.position = new Vector3(tilesContainer.transform.position.x + mazeWidth + 5, tilesContainer.transform.position.y);
             tilesContainer.name = "Maze 2";
-            tilesContainer.AddComponent<MazeSolver>();
+            tilesContainer.AddComponent<MazeSolver>().MazeIndex = 1;
             maze2 = tilesContainer;
         }
     }
