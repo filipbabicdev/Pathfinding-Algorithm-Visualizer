@@ -31,9 +31,11 @@ public class UIController : MonoBehaviour
         //Media button controls
         btnPlay.onClick.AddListener(() =>
         {
-            timeControl.StartTimer();            
-            GameObject.Find("Maze 1").GetComponent<MazeSolver>().SolveMaze();
-            GameObject.Find("Maze 2").GetComponent<MazeSolver>().SolveMaze();
+            timeControl.StartTimer();
+            mazeControl.Solver1.SolveMaze();
+            if (mazeControl.Solver2 != null)
+                mazeControl.Solver2.SolveMaze();
+
         });
 
         btnPause.onClick.AddListener(() =>
@@ -41,15 +43,17 @@ public class UIController : MonoBehaviour
             btnRandomize.interactable = true;
             btnReset.interactable = true;
             timeControl.PauseTimer();
-            GameObject.Find("Maze 1").GetComponent<MazeSolver>().PauseSolving();
-            GameObject.Find("Maze 2").GetComponent<MazeSolver>().PauseSolving();
+            mazeControl.Solver1.PauseSolving();
+            if (mazeControl.Solver2 != null)
+                mazeControl.Solver2.PauseSolving();
         });
 
         btnReset.onClick.AddListener(() =>
         {
             timeControl.ResetTimer();
-            GameObject.Find("Maze 1").GetComponent<MazeSolver>().ResetSolving();
-            GameObject.Find("Maze 2").GetComponent<MazeSolver>().ResetSolving();
+            mazeControl.Solver1.ResetSolving();
+            if (mazeControl.Solver2 != null)
+                mazeControl.Solver2.ResetSolving();
         });
 
         sidebar = GameObject.Find("Size Change Sidebar").GetComponent<RectTransform>();
@@ -57,7 +61,7 @@ public class UIController : MonoBehaviour
 
     void Update()
     {
-        if (sideOut && sidebar.anchoredPosition.x <  1685)
+        if (sideOut && sidebar.anchoredPosition.x < 1685)
             sidebar.Translate(new Vector3(0.005f, 0f, 0f) * Camera.main.orthographicSize);
         else if (!sideOut && sidebar.anchoredPosition.x > 1552)
             sidebar.Translate(new Vector3(-0.005f, 0f, 0f) * Camera.main.orthographicSize);
@@ -88,43 +92,21 @@ public class UIController : MonoBehaviour
 
     public void TileValueModeChange()
     {
-        if (tileValues.value > 0.5f)
+        bool show = tileValues.value > 0.5f;
+        SetTileValues(mazeControl.Solver1, show);
+        SetTileValues(mazeControl.Solver2, show);
+    }
+    void SetTileValues(MazeSolver solver, bool show)
+    {
+        if (solver == null)
+            return;
+
+        foreach (Transform t in solver.transform)
         {
-            foreach (Transform t in GameObject.Find("Maze 1").transform)
+            if (t.childCount > 0 && (show || t.name == "Final time"))
             {
-                if (t.childCount > 0)
-                {
-                    t.GetChild(0).gameObject.SetActive(true);
-                }
+                t.GetChild(0).gameObject.SetActive(show);
             }
-
-            foreach (Transform t in GameObject.Find("Maze 2").transform)
-            {
-                if (t.childCount > 0)
-                {
-                    t.GetChild(0).gameObject.SetActive(true);
-                }
-            }
-
-        }
-        else
-        {
-            foreach (Transform t in GameObject.Find("Maze 1").transform)
-            {
-                if (t.childCount > 0 && t.name != "Final time")
-                {
-                    t.GetChild(0).gameObject.SetActive(false);
-                }
-            }
-
-            foreach (Transform t in GameObject.Find("Maze 2").transform)
-            {
-                if (t.childCount > 0 && t.name != "Final time")
-                {
-                    t.GetChild(0).gameObject.SetActive(false);
-                }
-            }
-
         }
     }
 
@@ -145,7 +127,7 @@ public class UIController : MonoBehaviour
     }
 
     public void DisableFunctions()
-    {        
+    {
         comparison.interactable = false;
         tileValues.interactable = false;
         mapType.interactable = false;
@@ -159,7 +141,7 @@ public class UIController : MonoBehaviour
         //btnSpd3.interactable = false;
 
         dropA.interactable = false;
-        dropB.interactable = false;        
+        dropB.interactable = false;
     }
 
     public void ReanableFunctions()
@@ -189,8 +171,8 @@ public class UIController : MonoBehaviour
     {
         int heightValue, widthValue;
 
-        widthValue = (int) GameObject.Find("Slider Width").GetComponent<Slider>().value;
-        heightValue = (int) GameObject.Find("Slider Height").GetComponent<Slider>().value;
+        widthValue = (int)GameObject.Find("Slider Width").GetComponent<Slider>().value;
+        heightValue = (int)GameObject.Find("Slider Height").GetComponent<Slider>().value;
 
         //print("@UIController/SliderValueCheck - first value: width = " + widthValue + " height = " + heightValue);
 
@@ -199,7 +181,7 @@ public class UIController : MonoBehaviour
             widthValue += 1;
             GameObject.Find("Slider Width").GetComponent<Slider>().value = widthValue;
         }
-        else if(heightValue % 2 == 0)
+        else if (heightValue % 2 == 0)
         {
             heightValue += 1;
             GameObject.Find("Slider Height").GetComponent<Slider>().value = heightValue;

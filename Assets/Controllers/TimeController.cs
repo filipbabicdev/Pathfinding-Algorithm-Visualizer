@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class TimeController : MonoBehaviour
 {
+    [SerializeField] MazeController mazeControl;
     float time = 0f;
     public bool running = false;
     public Text timeDisplay;
@@ -60,13 +61,15 @@ public class TimeController : MonoBehaviour
     {
         time = 0f;
         DisplayTime(time);
-
-        try
-        {
-            Destroy(GameObject.Find("Maze 1").transform.Find("Final time").gameObject);
-            Destroy(GameObject.Find("Maze 2").transform.Find("Final time").gameObject);
-        }
-        catch { }
+        ClearFinalTime(mazeControl.Solver1);
+        ClearFinalTime(mazeControl.Solver2);
+    }
+    void ClearFinalTime(MazeSolver solver)
+    {
+        if (solver == null) return;
+        Transform ft = solver.transform.Find("Final Time");
+        if (ft != null) 
+            Destroy(ft.gameObject);
     }
 
     void DisplayTime(float time)

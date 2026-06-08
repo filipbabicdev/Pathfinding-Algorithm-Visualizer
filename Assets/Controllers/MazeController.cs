@@ -37,6 +37,8 @@ public class MazeController : MonoBehaviour
     public bool Compare { get => compare; set => compare = value; }
     public int MazeWidth { get => mazeWidth; set => mazeWidth = value; }
     public int MazeHeight { get => mazeHeight; set => mazeHeight = value; }
+    public MazeSolver Solver1 { get; private set; }
+    public MazeSolver Solver2 { get; private set; }
 
     void Start()
     {
@@ -212,11 +214,12 @@ public class MazeController : MonoBehaviour
         tilesContainer.transform.SetParent(this.transform, true);
         tilesContainer.transform.position = tilesContainer.transform.parent.position;
         tilesContainer.name = "Maze 1";
-        MazeSolver solver1 = tilesContainer.AddComponent<MazeSolver>();
-        solver1.MazeIndex = 0;
-        solver1.Init(this, worldController, timeController, dropA, dropB);
+        Solver1 = tilesContainer.AddComponent<MazeSolver>();
+        Solver1.MazeIndex = 0;
+        Solver1.Init(this, worldController, timeController, dropA, dropB);
         maze1 = tilesContainer;
 
+        Solver2 = null;
         if (compare)
         {
             tilesContainer = new GameObject();
@@ -224,9 +227,9 @@ public class MazeController : MonoBehaviour
             tilesContainer.transform.position = tilesContainer.transform.parent.position;
             tilesContainer.transform.position = new Vector3(tilesContainer.transform.position.x + mazeWidth + 5, tilesContainer.transform.position.y);
             tilesContainer.name = "Maze 2";
-            MazeSolver solver2 = tilesContainer.AddComponent<MazeSolver>();
-            solver2.MazeIndex = 1;
-            solver2.Init(this, worldController, timeController, dropA, dropB);
+            Solver2 = tilesContainer.AddComponent<MazeSolver>();
+            Solver2.MazeIndex = 1;
+            Solver2.Init(this, worldController, timeController, dropA, dropB);
             maze2 = tilesContainer;
         }
     }
