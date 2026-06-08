@@ -61,54 +61,12 @@ public class MazeSolver : MonoBehaviour
             if (MazeIndex == 0)
             {
                 worldController.mazeRunning1 = true;
-
-                switch (algoA.value)
-                {
-                    case 0:
-                        BFS(mazeController.mazeData[0]);
-                        nextFireTime = Time.time + cooldownTime;
-                        return;
-                    case 1:
-                        DFS(mazeA);
-                        nextFireTime = Time.time + cooldownTime;
-                        return;
-                    case 2:
-                        Dijkstra(mazeA);
-                        nextFireTime = Time.time + cooldownTime;
-                        return;
-                    case 3:
-                        AStar(mazeA);
-                        nextFireTime = Time.time + cooldownTime;
-                        return;
-                    default:
-                        return;
-                }
+                RunStep(algoA.value, mazeA);
             }
             else if (MazeIndex == 1)
             {
                 worldController.mazeRunning2 = true;
-
-                switch (algoB.value)
-                {
-                    case 0:
-                        BFS(mazeController.mazeData[1]);
-                        nextFireTime = Time.time + cooldownTime;
-                        return;
-                    case 1:
-                        DFS(mazeB);
-                        nextFireTime = Time.time + cooldownTime;
-                        return;
-                    case 2:
-                        Dijkstra(mazeB);
-                        nextFireTime = Time.time + cooldownTime;
-                        return;
-                    case 3:
-                        AStar(mazeB);
-                        nextFireTime = Time.time + cooldownTime;
-                        return;
-                    default:
-                        return;
-                }
+                RunStep(algoB.value, mazeB);
             }
         }
 
@@ -555,5 +513,16 @@ public class MazeSolver : MonoBehaviour
         text.resizeTextForBestFit = true;
         text.resizeTextMaxSize = 300;
         text.color = mazeController.colorWall;
+    }
+
+    void RunStep(int step, Maze maze) {
+        switch (step) {
+            case 0: BFS(maze); break;
+            case 1: DFS(maze); break;
+            case 2: Dijkstra(maze); break;
+            case 3: AStar(maze); break;
+            default: return;
+        }
+        nextFireTime = Time.time + cooldownTime;
     }
 }
