@@ -59,15 +59,10 @@ public class TimeController : MonoBehaviour
     {
         time = 0f;
         DisplayTime(time);
-        ClearFinalTime(mazeControl.Solver1);
-        ClearFinalTime(mazeControl.Solver2);
-    }
-    void ClearFinalTime(MazeSolver solver)
-    {
-        if (solver == null) return;
-        Transform ft = solver.transform.Find("Final Time");
-        if (ft != null)
-            Destroy(ft.gameObject);
+        if (mazeControl.Solver1 != null)
+            mazeControl.Solver1.ClearFinalTime();
+        if (mazeControl.Solver2 != null)
+            mazeControl.Solver2.ClearFinalTime();
     }
 
     void DisplayTime(float time)

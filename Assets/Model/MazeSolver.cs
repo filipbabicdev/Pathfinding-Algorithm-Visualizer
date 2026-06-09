@@ -417,7 +417,10 @@ public class MazeSolver : MonoBehaviour
     {
         running = true;
         if (stage == 0)
+        {
+            ClearFinalTime();
             mazeController.ResetVisited(mazeController.mazeData[MazeIndex]);
+        }
     }
 
     public void PauseSolving()
@@ -428,6 +431,7 @@ public class MazeSolver : MonoBehaviour
     public void ResetSolving()
     {
         stage = 0;
+        ClearFinalTime();
         mazeController.ResetVisited(mazeController.mazeData[MazeIndex]);
     }
 
@@ -439,7 +443,7 @@ public class MazeSolver : MonoBehaviour
         GameObject myText = new GameObject();
 
         myCanvas.transform.SetParent(this.transform);
-        myCanvas.name = "Final time";
+        myCanvas.name = "Final Time";
         myCanvas.AddComponent<Canvas>();
 
         myCanvas.transform.position = new Vector3(this.transform.position.x + Mathf.FloorToInt(mazeController.mazeData[MazeIndex].Width / 2), -2, 1);
@@ -484,5 +488,12 @@ public class MazeSolver : MonoBehaviour
             default: return;
         }
         nextFireTime = Time.time + defaultCooldownTime / timeController.SpeedIndex;
+    }
+
+    public void ClearFinalTime()
+    {
+        Transform ft = this.transform.Find("Final Time");
+        if (ft != null)
+            Destroy(ft.gameObject);
     }
 }
