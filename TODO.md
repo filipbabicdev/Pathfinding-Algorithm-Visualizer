@@ -14,6 +14,12 @@
       pauzira na pola, promeni algoritam i klikne Play, ništa se ne dešava
       (stage != 0, pa novi algoritam ne prođe inicijalizaciju). Detektovati
       promenu algoritma i forsirati reset pre nastavka.
+- [ ] Tajmer se resetuje na nastavak posle pauze: pauziraj izvršavanje pa
+      ponovo klikni Play — vreme se vrati na 0 umesto da nastavi. Uzrok:
+      PauseTimer postavlja mazeRunning1/2 na false, pa StartTimer
+      (uslov !mazeRunning1 && !mazeRunning2) tretira nastavak kao nov start
+      i pozove ResetTimer. Treba pouzdaniji signal "nov run vs nastavak"
+      (npr. resetovati samo kad je stage == 0), nezavisno od mazeRunning zastavica.
 
 ## Manje izmene / čišćenje
 - [ ] Jedan izvor za string "Final time" (const u MazeSolver-u) da
