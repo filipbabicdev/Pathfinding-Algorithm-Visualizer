@@ -5,73 +5,100 @@ using UnityEngine;
 
 public class PriorityQueue<TElement>
 {
-    List<ElementList> List = new List<ElementList>();
-    ElementList result;
-    System.Random rand = new System.Random();
+    // Min-heap u nizu: heap[0] je uvek najmanji prioritet.
+    List<Node> heap = new List<Node>();
+    // element -> indeks u heap-u, za O(1) Contains i O(log n) SetPriority
+    Dictionary<TElement, int> indexOf = new Dictionary<TElement, int>();
+
+    public int Count()
+    {
+        return heap.Count;
+    }
 
     public void Enqueue(TElement e, int p = 0)
     {
-        List.Add(new ElementList(e, p));
+        // Ako element već postoji, tretiraj kao promenu prioriteta (čuva konzistentnost mape).
+        if (indexOf.ContainsKey(e))
+        {
+            SetPriority(e, p);
+            return;
+        }
+        heap.Add(new Node(e, p));
+        int i = heap.Count - 1;
+        indexOf[e] = i;
+        SiftUp(i);
     }
 
     public TElement Dequeue()
-    {       
-        result = List[0];        
-
-        foreach (ElementList e in List) {
-            if (result.priority > e.priority)
-            {
-                result = e;
-            }
-        }
-        List.Remove(result);
-
-        return result.element;
+    {
+        TElement min = heap[0].element;
+        int last = heap.Count - 1;
+        Swap(0, last);
+        heap.RemoveAt(last);
+        indexOf.Remove(min);
+        if (heap.Count > 0)
+            SiftDown(0);
+        return min;
     }
 
     public bool Contains(TElement e)
     {
-        foreach(ElementList el in List)
-        {
-            if(el.element.Equals(e))
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return indexOf.ContainsKey(e);
     }
 
     public void SetPriority(TElement e, int p)
     {
-        foreach (ElementList el in List)
+        if (!indexOf.TryGetValue(e, out int i))
+            return;
+        int old = heap[i].priority;
+        heap[i].priority = p;
+        if (p < old) SiftUp(i);        // prioritet smanjen (decrease-key, kao kod relaksacije)
+        else if (p > old) SiftDown(i);
+    }
+
+    void SiftUp(int i)
+    {
+        while (i > 0)
         {
-            if (el.element.Equals(e))
+            int parent = (i - 1) / 2;
+            if (heap[i].priority < heap[parent].priority)
             {
-                el.priority = p;
-                break;
+                Swap(i, parent);
+                i = parent;
             }
+            else break;
         }
     }
 
-    public int Count()
+    void SiftDown(int i)
     {
-        return List.Count;
+        int n = heap.Count;
+        while (true)
+        {
+            int left = 2 * i + 1;
+            int right = 2 * i + 2;
+            int smallest = i;
+            if (left < n && heap[left].priority < heap[smallest].priority) smallest = left;
+            if (right < n && heap[right].priority < heap[smallest].priority) smallest = right;
+            if (smallest == i) break;
+            Swap(i, smallest);
+            i = smallest;
+        }
     }
 
-    class ElementList
+    void Swap(int a, int b)
+    {
+        Node tmp = heap[a];
+        heap[a] = heap[b];
+        heap[b] = tmp;
+        indexOf[heap[a].element] = a;
+        indexOf[heap[b].element] = b;
+    }
+
+    class Node
     {
         public TElement element;
         public int priority;
-
-        public ElementList(TElement e, int priority)
-        {
-            this.element = e;
-            this.priority = priority;
-        }       
-        public override string ToString()
-        {
-            return element.ToString() + " and priority is:" + priority;
-        }
+        public Node(TElement e, int p) { element = e; priority = p; }
     }
 }
