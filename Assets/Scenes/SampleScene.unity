@@ -368,7 +368,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maze: {fileID: 1770673679}
   time: {fileID: 1342111133}
-  ui: {fileID: 0}
+  ui: {fileID: 2142909703}
 --- !u!1 &67888587
 GameObject:
   m_ObjectHideFlags: 0
@@ -10940,6 +10940,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 038bbfaadd4551149b84efcf72f7cfcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mazeControl: {fileID: 1770673679}
+  worldControl: {fileID: 18179345}
   running: 0
   timeDisplay: {fileID: 806465772}
   spd1: {fileID: 1368242243}
@@ -12114,6 +12116,8 @@ MonoBehaviour:
   timeController: {fileID: 1342111133}
   dropA: {fileID: 1085975431}
   dropB: {fileID: 364616929}
+  sliderWidth: {fileID: 761639918}
+  sliderHeight: {fileID: 581301189}
   mazeFloors:
   - {fileID: 21300000, guid: 0d46dd6996d60944683439c96c8c82e8, type: 3}
   - {fileID: 21300000, guid: 31a266c1681ddc6479b8cb2608aaa1ea, type: 3}
@@ -13405,6 +13409,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65bfea24d3405844ea809fa0cd064583, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sliderWidth: {fileID: 761639918}
+  sliderHeight: {fileID: 581301189}
+  lblSliderWidth: {fileID: 221543244}
+  lblSliderHeight: {fileID: 1779051665}
   mazeControl: {fileID: 1770673679}
   timeControl: {fileID: 1342111133}
   comparison: {fileID: 507283650}
