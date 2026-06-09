@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
+    [SerializeField] Slider sliderWidth, sliderHeight;
+    [SerializeField] Text lblSliderWidth, lblSliderHeight;
     public MazeController mazeControl;
     public TimeController timeControl;
 
@@ -169,26 +171,21 @@ public class UIController : MonoBehaviour
 
     public void SliderValueCheck()
     {
-        int heightValue, widthValue;
-
-        widthValue = (int)GameObject.Find("Slider Width").GetComponent<Slider>().value;
-        heightValue = (int)GameObject.Find("Slider Height").GetComponent<Slider>().value;
-
-        //print("@UIController/SliderValueCheck - first value: width = " + widthValue + " height = " + heightValue);
+        int widthValue = (int)sliderWidth.value;
+        int heightValue = (int)sliderHeight.value;
 
         if (widthValue % 2 == 0)
         {
             widthValue += 1;
-            GameObject.Find("Slider Width").GetComponent<Slider>().value = widthValue;
+            sliderWidth.value = widthValue;
         }
         else if (heightValue % 2 == 0)
         {
             heightValue += 1;
-            GameObject.Find("Slider Height").GetComponent<Slider>().value = heightValue;
+            sliderHeight.value = heightValue;
         }
-        //print("@UIController/SliderValueCheck - second value: width = " + widthValue + " height = " + heightValue);
 
-        GameObject.Find("lblSliderWidth").GetComponent<Text>().text = "Width: " + widthValue;
-        GameObject.Find("lblSliderHeight").GetComponent<Text>().text = "Height: " + heightValue;
+        lblSliderWidth.text = "Width: " + widthValue;
+        lblSliderHeight.text = "Height: " + heightValue;
     }
 }

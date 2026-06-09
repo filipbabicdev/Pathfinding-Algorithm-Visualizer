@@ -10,6 +10,7 @@ public class MazeController : MonoBehaviour
     [SerializeField] WorldController worldController;
     [SerializeField] TimeController timeController;
     [SerializeField] Dropdown dropA, dropB;
+    [SerializeField] Slider sliderWidth, sliderHeight;
     int mazeWidth = 31;
     int mazeHeight = 31;
 
@@ -205,7 +206,7 @@ public class MazeController : MonoBehaviour
                 }
             }
         }
-        GameObject.FindObjectOfType<WorldController>().CenterCamera();
+        worldController.CenterCamera();
     }
 
     void TilesContainer()
@@ -322,12 +323,10 @@ public class MazeController : MonoBehaviour
         //Make a container GameObject for tiles
         TilesContainer();
 
-        if (mazeWidth != GameObject.Find("Slider Width").GetComponent<Slider>().value || mazeHeight != GameObject.Find("Slider Height").GetComponent<Slider>().value)
+        if (mazeWidth != sliderWidth.value || mazeHeight != sliderHeight.value)
         {
-            mazeWidth = (int)GameObject.Find("Slider Width").GetComponent<Slider>().value;
-            mazeHeight = (int)GameObject.Find("Slider Height").GetComponent<Slider>().value;
-
-            print("@MazeController/GenerateMap - new size: " + mazeWidth + ", " + mazeHeight);
+            mazeWidth = (int)sliderWidth.value;
+            mazeHeight = (int)sliderHeight.value;
 
             mazeData[0] = new Maze(mazeWidth, mazeHeight);
             mazeData[1] = new Maze(mazeWidth, mazeHeight);

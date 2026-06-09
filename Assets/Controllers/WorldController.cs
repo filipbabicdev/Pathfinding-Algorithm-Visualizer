@@ -19,11 +19,7 @@ public class WorldController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        maze = GameObject.FindObjectOfType<MazeController>();
-        time = GameObject.FindObjectOfType<TimeController>();
-        ui = GameObject.FindObjectOfType<UIController>();
 
-        //CenterCamera();
     }
 
     // Update is called once per frame

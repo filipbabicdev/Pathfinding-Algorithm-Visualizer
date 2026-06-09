@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class TimeController : MonoBehaviour
 {
     [SerializeField] MazeController mazeControl;
+    [SerializeField] WorldController worldControl;
     float time = 0f;
     public bool running = false;
     public Text timeDisplay;
@@ -43,18 +44,15 @@ public class TimeController : MonoBehaviour
 
     public void StartTimer()
     {
-        if (!GameObject.FindObjectOfType<WorldController>().mazeRunning1 && !GameObject.FindObjectOfType<WorldController>().mazeRunning2)
-        {
+        if (!worldControl.mazeRunning1 && !worldControl.mazeRunning2)
             ResetTimer();
-        }
         running = true;
     }
 
     public void PauseTimer()
     {
         running = false;
-        WorldController wc = GameObject.FindObjectOfType<WorldController>();
-        wc.mazeRunning1 = wc.mazeRunning2 = false;
+        worldControl.mazeRunning1 = worldControl.mazeRunning2 = false;
     }
 
     public void ResetTimer()
@@ -68,7 +66,7 @@ public class TimeController : MonoBehaviour
     {
         if (solver == null) return;
         Transform ft = solver.transform.Find("Final Time");
-        if (ft != null) 
+        if (ft != null)
             Destroy(ft.gameObject);
     }
 
